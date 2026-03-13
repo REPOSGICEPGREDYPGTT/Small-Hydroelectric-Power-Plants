@@ -19,8 +19,9 @@ import stage6
 
 
 ARTICLE_SOURCE_PATH = r"c:\Users\ajust\OneDrive\Escritorio\Eduardo\DarioQuintero_articulo\Articulo_IAS_2026_R4.docx"
-ARTICLE_PUBLICATION_URL = ""
-ARTICLE_PUBLICATION_STATUS = "Under peer review"
+ARTICLE_PUBLICATION_URL = "https://doi.org/10.1109/IAS62731.2025.11061555"
+ARTICLE_PUBLICATION_STATUS = "Published in 2025 IEEE Industry Applications Society Annual Meeting (IAS 2025)"
+ARTICLE_PUBLICATION_TITLE = "Optimizing Small Hydropower Key Material Considerations"
 
 
 PLATFORM_HIGHLIGHTS: List[str] = [
@@ -158,6 +159,24 @@ def inject_styles() -> None:
         """
         <style>
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+            :root {
+                --hm-card-bg: color-mix(in srgb, var(--secondary-background-color) 92%, var(--background-color) 8%);
+                --hm-card-border: color-mix(in srgb, var(--text-color) 16%, transparent);
+                --hm-card-text: var(--text-color);
+                --hm-card-strong: var(--text-color);
+                --hm-badge-bg: color-mix(in srgb, var(--secondary-background-color) 80%, var(--primary-color) 20%);
+                --hm-badge-border: color-mix(in srgb, var(--primary-color) 35%, transparent);
+                --hm-badge-text: var(--text-color);
+                --hm-method-bg: color-mix(in srgb, var(--secondary-background-color) 92%, var(--background-color) 8%);
+                --hm-method-border: color-mix(in srgb, var(--text-color) 16%, transparent);
+                --hm-method-stage-bg: color-mix(in srgb, var(--primary-color) 20%, var(--secondary-background-color) 80%);
+                --hm-method-stage-border: color-mix(in srgb, var(--primary-color) 35%, transparent);
+                --hm-method-stage-text: var(--text-color);
+                --hm-method-title-text: var(--text-color);
+                --hm-method-body-text: var(--text-color);
+                --hm-method-body-strong: var(--text-color);
+                --hm-summary-text: var(--text-color);
+            }
             html, body, [class*="css"] { font-family: 'IBM Plex Sans', sans-serif; }
             .block-container { padding-top: 1.0rem; padding-bottom: 1.8rem; }
             .hero {
@@ -172,34 +191,184 @@ def inject_styles() -> None:
             .hero h1 { margin: 0; font-size: 1.45rem; font-weight: 700; }
             .hero p { margin: 6px 0 0 0; color: #d8e9ff; font-size: .95rem; }
             .card {
+                position: relative;
+                overflow: hidden;
                 border-radius: 12px;
-                padding: 10px 12px;
-                border: 1px solid #d9e4f2;
-                background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
-                color: #1f3550 !important;
+                padding: 14px 16px;
+                min-height: 132px;
+                border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+                background:
+                    radial-gradient(circle at top left, color-mix(in srgb, var(--primary-color) 10%, transparent) 0%, transparent 38%),
+                    linear-gradient(
+                        180deg,
+                        color-mix(in srgb, var(--secondary-background-color) 94%, var(--background-color) 6%) 0%,
+                        color-mix(in srgb, var(--secondary-background-color) 84%, var(--background-color) 16%) 100%
+                    );
+                color: var(--hm-card-text) !important;
+                box-shadow:
+                    0 10px 24px rgba(15, 23, 42, 0.12),
+                    inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+            }
+            .card::before {
+                content: "";
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 2px;
+                background: linear-gradient(90deg, color-mix(in srgb, var(--primary-color) 72%, transparent) 0%, transparent 100%);
+                opacity: 0.9;
             }
             .card b {
-                color: #102941 !important;
+                color: var(--hm-card-strong) !important;
                 font-weight: 700;
+            }
+            .journey-card {
+                border-radius: 16px;
+                height: clamp(230px, 22vw, 280px);
+                padding: 16px 18px;
+                border: 1px solid rgba(86, 132, 214, 0.18);
+                background: linear-gradient(180deg, rgba(12, 21, 38, 0.90) 0%, rgba(8, 15, 28, 0.96) 100%);
+                box-shadow:
+                    0 12px 28px rgba(0, 0, 0, 0.18),
+                    inset 0 1px 0 rgba(255,255,255,0.04);
+                color: var(--text-color) !important;
+                display: flex;
+                flex-direction: column;
+            }
+            .journey-card b {
+                display: inline-block;
+                margin-bottom: 0.45rem;
+            }
+            .journey-blue {
+                background:
+                    radial-gradient(circle at 0% 0%, rgba(72,149,255,0.14) 0%, transparent 40%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+            }
+            .journey-green {
+                background:
+                    radial-gradient(circle at 100% 0%, rgba(0,212,170,0.12) 0%, transparent 36%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+            }
+            .journey-amber {
+                background:
+                    radial-gradient(circle at 50% 0%, rgba(255,168,76,0.12) 0%, transparent 34%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+            }
+            .overview-card {
+                position: relative;
+                overflow: hidden;
+                border-radius: 16px;
+                height: clamp(250px, 24vw, 360px);
+                padding: 18px 20px;
+                border: 1px solid color-mix(in srgb, var(--primary-color) 28%, rgba(255,255,255,0.08) 72%);
+                background:
+                    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--primary-color) 24%, transparent) 0%, transparent 40%),
+                    radial-gradient(circle at 100% 0%, color-mix(in srgb, white 6%, transparent) 0%, transparent 28%),
+                    linear-gradient(
+                        160deg,
+                        color-mix(in srgb, #10243d 78%, var(--secondary-background-color) 22%) 0%,
+                        color-mix(in srgb, #0b1627 86%, var(--background-color) 14%) 100%
+                    );
+                box-shadow:
+                    0 18px 44px rgba(0, 0, 0, 0.28),
+                    inset 0 1px 0 rgba(255,255,255,0.08),
+                    inset 0 0 0 1px rgba(120,160,255,0.05);
+                color: var(--text-color) !important;
+                display: flex;
+                flex-direction: column;
+            }
+            .overview-card::before {
+                content: "";
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 4px;
+                background: linear-gradient(90deg, color-mix(in srgb, var(--primary-color) 92%, white 8%) 0%, transparent 100%);
+                opacity: 1;
+            }
+            .overview-card::after {
+                content: "";
+                position: absolute;
+                inset: auto 18px 0 18px;
+                height: 1px;
+                background: linear-gradient(90deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+            }
+            .overview-card b {
+                display: inline-block;
+                margin-bottom: 0.55rem;
+                color: var(--text-color) !important;
+                font-weight: 700;
+                font-size: 1.02rem;
+                letter-spacing: -0.01em;
+            }
+            @media (prefers-color-scheme: dark) {
+                .overview-card {
+                    border: 1px solid rgba(64, 136, 255, 0.34);
+                    background:
+                        radial-gradient(circle at 0% 0%, rgba(52, 122, 255, 0.22) 0%, transparent 42%),
+                        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 26%),
+                        linear-gradient(180deg, rgba(14, 31, 54, 0.96) 0%, rgba(8, 18, 33, 0.98) 100%);
+                    box-shadow:
+                        0 20px 48px rgba(0, 0, 0, 0.32),
+                        0 0 0 1px rgba(64, 136, 255, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                }
+                .overview-card::before {
+                    height: 4px;
+                    background: linear-gradient(90deg, rgba(72, 149, 255, 0.95) 0%, rgba(72, 149, 255, 0.18) 72%, transparent 100%);
+                }
+                .overview-card::after {
+                    background: linear-gradient(90deg, rgba(255,255,255,0.14) 0%, transparent 100%);
+                }
             }
             .badge {
                 display: inline-block;
-                border: 1px solid #acc9ef;
-                background: #edf5ff;
+                border: 1px solid var(--hm-badge-border);
+                background: var(--hm-badge-bg);
                 border-radius: 999px;
                 padding: 3px 10px;
                 margin-right: 6px;
                 margin-bottom: 6px;
                 font-size: .79rem;
-                color: #294766;
+                color: var(--hm-badge-text);
             }
             .method-card {
-                border-radius: 12px;
-                border: 1px solid #d7e4f3;
-                background: linear-gradient(180deg, #ffffff 0%, #f6fbff 100%);
-                padding: 12px 14px;
-                margin-bottom: 10px;
-                min-height: 236px;
+                position: relative;
+                overflow: hidden;
+                border-radius: 16px;
+                border: 1px solid rgba(86, 132, 214, 0.16);
+                background:
+                    radial-gradient(circle at top left, rgba(72,149,255,0.10) 0%, transparent 36%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+                padding: 14px 15px;
+                margin-bottom: 12px;
+                height: clamp(420px, 34vw, 520px);
+                box-shadow:
+                    0 14px 30px rgba(0, 0, 0, 0.22),
+                    inset 0 1px 0 rgba(255,255,255,0.04);
+                display: flex;
+                flex-direction: column;
+            }
+            .method-card::before {
+                content: "";
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 3px;
+                background: linear-gradient(90deg, rgba(72,149,255,0.74) 0%, transparent 100%);
+                opacity: 0.9;
+            }
+            .method-blue {
+                background:
+                    radial-gradient(circle at 0% 0%, rgba(72,149,255,0.15) 0%, transparent 40%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+            }
+            .method-green {
+                background:
+                    radial-gradient(circle at 100% 0%, rgba(0,212,170,0.12) 0%, transparent 34%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+            }
+            .method-amber {
+                background:
+                    radial-gradient(circle at 50% 0%, rgba(255,168,76,0.12) 0%, transparent 36%),
+                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
             }
             .method-stage {
                 display: inline-block;
@@ -207,9 +376,9 @@ def inject_styles() -> None:
                 font-weight: 700;
                 letter-spacing: .04em;
                 text-transform: uppercase;
-                color: #1d4f85;
-                background: #eaf3ff;
-                border: 1px solid #c7dcf6;
+                color: var(--hm-method-stage-text);
+                background: var(--hm-method-stage-bg);
+                border: 1px solid var(--hm-method-stage-border);
                 border-radius: 999px;
                 padding: 2px 9px;
                 margin-bottom: 8px;
@@ -217,18 +386,37 @@ def inject_styles() -> None:
             .method-title {
                 margin: 0 0 6px 0;
                 font-size: 1.02rem;
-                color: #11283e;
+                color: var(--hm-method-title-text);
                 font-weight: 700;
             }
             .method-line {
                 margin: 0 0 7px 0;
                 font-size: .84rem;
-                color: #2a425d;
+                color: var(--hm-method-body-text);
                 line-height: 1.35;
             }
             .method-line b {
-                color: #13385a;
+                color: var(--hm-method-body-strong);
                 font-weight: 600;
+            }
+            .summary-text-metric {
+                margin-bottom: 0.25rem;
+            }
+            .summary-text-metric-label {
+                font-size: 0.95rem;
+                font-weight: 500;
+                color: var(--hm-summary-text);
+                opacity: 0.72;
+                margin-bottom: 0.45rem;
+            }
+            .summary-text-metric-value {
+                font-size: clamp(2.2rem, 2.6vw, 3rem);
+                line-height: 1.04;
+                font-weight: 400;
+                letter-spacing: -0.02em;
+                color: var(--hm-summary-text);
+                overflow-wrap: anywhere;
+                word-break: break-word;
             }
         </style>
         """,
@@ -303,6 +491,46 @@ def _metric_row(current: Dict[str, float], baseline: Dict[str, float], labels: D
         b = baseline.get(key)
         delta = None if b is None else val - b
         cols[i].metric(labels.get(key, key), f"{val:,.6f}", None if delta is None else f"{delta:+,.6f}")
+
+
+def _text_metric(label: str, value: str) -> None:
+    st.markdown(
+        f"""
+        <div class="summary-text-metric">
+            <div class="summary-text-metric-label">{label}</div>
+            <div class="summary-text-metric-value">{value}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _style_plotly_figure(
+    fig: go.Figure,
+    *,
+    height: int,
+    xaxis_title: str | None = None,
+    yaxis_title: str | None = None,
+    showlegend: bool | None = None,
+    layout_overrides: Dict[str, Any] | None = None,
+) -> go.Figure:
+    fig.update_layout(
+        height=height,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"family": "IBM Plex Sans, sans-serif"},
+        title={"font": {"size": 19}},
+    )
+    if showlegend is not None:
+        fig.update_layout(showlegend=showlegend)
+    if layout_overrides:
+        fig.update_layout(**layout_overrides)
+
+    fig.update_xaxes(title_text=xaxis_title)
+    fig.update_yaxes(title_text=yaxis_title)
+    if hasattr(fig.layout, "polar"):
+        fig.update_polars(bgcolor="rgba(0,0,0,0)")
+    return fig
 
 
 def _step_from_default(default: Any, min_step: float = 1e-6) -> float:
@@ -639,7 +867,7 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     c1, c2, c3 = st.columns(3)
     c1.markdown(
         """
-        <div class="card">
+        <div class="overview-card">
             <b>Problem</b><br/>
             Low-head SHP selection requires balancing hydraulic behavior, durability, reliability, and long-term cost under uncertainty.
         </div>
@@ -648,7 +876,7 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     )
     c2.markdown(
         """
-        <div class="card">
+        <div class="overview-card">
             <b>Approach</b><br/>
             A six-stage computational workflow links physics, economics, multi-criteria ranking, and robustness validation in one traceable pipeline.
         </div>
@@ -657,7 +885,7 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     )
     c3.markdown(
         """
-        <div class="card">
+        <div class="overview-card">
             <b>Value</b><br/>
             Decision-makers can evaluate alternatives consistently, explain criteria trade-offs, and justify final selection with confidence.
         </div>
@@ -666,7 +894,9 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     )
 
     if ARTICLE_PUBLICATION_URL.strip():
-        st.markdown(f"**Technical reference source:** [Published article]({ARTICLE_PUBLICATION_URL.strip()})")
+        st.markdown(
+            f"**Technical reference source:** [{ARTICLE_PUBLICATION_TITLE}]({ARTICLE_PUBLICATION_URL.strip()})"
+        )
     else:
         st.info("Technical reference source: published article URL will be provided here (currently under peer review).")
     st.caption(f"Publication status: {ARTICLE_PUBLICATION_STATUS}.")
@@ -680,9 +910,10 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     for start in range(0, len(METHODOLOGY_STAGES), row_size):
         cols = st.columns(row_size)
         for idx, item in enumerate(METHODOLOGY_STAGES[start : start + row_size]):
+            tone = ["method-blue", "method-green", "method-amber"][(start + idx) % 3]
             cols[idx].markdown(
                 f"""
-                <div class="method-card">
+                <div class="method-card {tone}">
                     <div class="method-stage">{item["stage"]}</div>
                     <p class="method-title">{item["name"]}</p>
                     <p class="method-line"><b>Input:</b> {item["inputs"]}</p>
@@ -697,7 +928,7 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     p1, p2, p3 = st.columns(3)
     p1.markdown(
         """
-        <div class="card">
+        <div class="journey-card journey-blue">
             <b>1) Configure Inputs</b><br/>
             Use the Inputs tab to set hydraulic, material, reliability, economic, and decision parameters.
         </div>
@@ -706,7 +937,7 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     )
     p2.markdown(
         """
-        <div class="card">
+        <div class="journey-card journey-green">
             <b>2) Run Integrated Pipeline</b><br/>
             The platform automatically executes Stages 1-6 and propagates dependencies across all computations.
         </div>
@@ -715,10 +946,9 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
     )
     p3.markdown(
         f"""
-        <div class="card">
+        <div class="journey-card journey-amber">
             <b>3) Review Decision Evidence</b><br/>
             Explore outputs in Results, App_MHS Figures, and Sensitivity tabs for technical and robustness analysis.
-            <br/><br/><b>Publication status:</b> {ARTICLE_PUBLICATION_STATUS}.
         </div>
         """,
         unsafe_allow_html=True,
@@ -730,10 +960,14 @@ def render_summary(current: Dict[str, Dict[str, Any]], base: Dict[str, Dict[str,
     best_curr = current["stage5"]["alternatives"][0]
     best_base = base["stage5"]["alternatives"][0]
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Top alternative (Current)", best_curr["Code"])
+    c1, c2 = st.columns([1.8, 1.0])
+    with c1:
+        _text_metric("Top alternative (Current)", best_curr["Code"])
     c2.metric("Current score", f"{best_curr['S_weighted']:.4f}")
-    c3.metric("Top alternative (Base)", best_base["Code"])
+
+    c3, c4 = st.columns([1.8, 1.0])
+    with c3:
+        _text_metric("Top alternative (Base)", best_base["Code"])
     c4.metric("Base score", f"{best_base['S_weighted']:.4f}", f"{best_curr['S_weighted'] - best_base['S_weighted']:+.4f}")
 
     _metric_row(
@@ -754,7 +988,7 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
         loss_df = pd.DataFrame(current["stage1"]["loss_budget"])
         if not loss_df.empty:
             fig = px.bar(loss_df.sort_values("hL_m", ascending=False), x="Element", y="hL_m", color="K", title="Local head losses per element")
-            fig.update_layout(height=380, xaxis_title="", yaxis_title="hL [m]")
+            _style_plotly_figure(fig, height=380, xaxis_title="", yaxis_title="hL [m]")
             st.plotly_chart(fig, width="stretch")
             st.dataframe(loss_df, width="stretch")
 
@@ -764,7 +998,7 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
         alts_df = pd.DataFrame(current["stage2"]["alternatives"])
         if not mats_df.empty:
             fig = px.bar(mats_df.sort_values("T_eff_tilde", ascending=False), x="Material", y="T_eff_tilde", color="alpha_mat", title="Durability normalized index (T_eff_tilde)")
-            fig.update_layout(height=360, xaxis_title="", yaxis_title="T_eff_tilde")
+            _style_plotly_figure(fig, height=360, xaxis_title="", yaxis_title="T_eff_tilde")
             st.plotly_chart(fig, width="stretch")
             st.dataframe(mats_df, width="stretch")
         if not alts_df.empty:
@@ -776,7 +1010,7 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
         alts_df = pd.DataFrame(current["stage3"]["alternatives"])
         if not alts_df.empty:
             fig = px.bar(alts_df.sort_values("alpha_R", ascending=False), x="Code", y="alpha_R", color="ENS_kWh_per_year", title="alpha_R by alternative (color = ENS)")
-            fig.update_layout(height=360, xaxis_title="", yaxis_title="alpha_R")
+            _style_plotly_figure(fig, height=360, xaxis_title="", yaxis_title="alpha_R")
             st.plotly_chart(fig, width="stretch")
             st.dataframe(alts_df, width="stretch")
 
@@ -786,11 +1020,11 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
         if not alts_df.empty:
             stack_df = alts_df[["Code", "CAPEX_COP", "PV_maint_COP", "PV_int_COP", "PV_rep_COP"]].melt(id_vars="Code", var_name="Component", value_name="COP")
             fig_stack = px.bar(stack_df, x="Code", y="COP", color="Component", title="Discounted cost decomposition")
-            fig_stack.update_layout(height=390, xaxis_title="", yaxis_title="COP")
+            _style_plotly_figure(fig_stack, height=390, xaxis_title="", yaxis_title="COP")
             st.plotly_chart(fig_stack, width="stretch")
 
             fig_norm = px.bar(alts_df.sort_values("LCC_tilde", ascending=False), x="Code", y="LCC_tilde", color="LCC_COP", title="Economic normalized score (LCC_tilde)")
-            fig_norm.update_layout(height=350, xaxis_title="", yaxis_title="LCC_tilde")
+            _style_plotly_figure(fig_norm, height=350, xaxis_title="", yaxis_title="LCC_tilde")
             st.plotly_chart(fig_norm, width="stretch")
             st.dataframe(alts_df, width="stretch")
 
@@ -806,13 +1040,13 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
         c3.metric("CR", f"{ahp['CR']:.6f}")
 
         fig_w = px.bar(w_df.sort_values("Weight", ascending=False), x="Criterion", y="Weight", title="AHP weights")
-        fig_w.update_layout(height=330, xaxis_title="", yaxis_title="Weight")
+        _style_plotly_figure(fig_w, height=330, xaxis_title="", yaxis_title="Weight")
         st.plotly_chart(fig_w, width="stretch")
 
         rank_df = pd.DataFrame(current["stage5"]["alternatives"])
         if not rank_df.empty:
             fig_r = px.bar(rank_df.sort_values("S_weighted", ascending=True), x="S_weighted", y="Code", orientation="h", color="Ranking", title="Weighted MCDA score ranking")
-            fig_r.update_layout(height=420, xaxis_title="S_weighted", yaxis_title="")
+            _style_plotly_figure(fig_r, height=420, xaxis_title="S_weighted", yaxis_title="")
             st.plotly_chart(fig_r, width="stretch")
             st.dataframe(rank_df, width="stretch")
 
@@ -822,7 +1056,7 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
         candidates_df = pd.DataFrame(current["stage6"]["selection"]["candidates"])
         if not candidates_df.empty:
             fig_c = px.line(candidates_df.sort_values("M"), x="M", y="xie_beni", markers=True, title="Xie-Beni by candidate M")
-            fig_c.update_layout(height=320)
+            _style_plotly_figure(fig_c, height=320)
             st.plotly_chart(fig_c, width="stretch")
 
         u = np.array(best["U_MxN"], dtype=float)
@@ -830,7 +1064,7 @@ def render_stage_results(current: Dict[str, Dict[str, Any]], base: Dict[str, Dic
             experts = [f"E{i+1}" for i in range(u.shape[1])]
             clusters = [f"C{i+1}" for i in range(u.shape[0])]
             heat = go.Figure(data=go.Heatmap(z=u, x=experts, y=clusters, colorscale="Blues", colorbar={"title": "u(k,i)"}))
-            heat.update_layout(title="Fuzzy membership matrix U", height=380)
+            _style_plotly_figure(heat, height=380, xaxis_title="Experts", yaxis_title="Clusters", showlegend=False, layout_overrides={"title": "Fuzzy membership matrix U"})
             st.plotly_chart(heat, width="stretch")
 
         cons = current["stage6"]["consensus"]
@@ -870,7 +1104,11 @@ def render_app_mhs_charts(current: Dict[str, Dict[str, Any]], base: Dict[str, Di
         radar = go.Figure()
         radar.add_trace(go.Scatterpolar(r=base_vals + [base_vals[0]], theta=close, fill="toself", name="Base Best", opacity=0.35))
         radar.add_trace(go.Scatterpolar(r=curr_vals + [curr_vals[0]], theta=close, fill="toself", name="Current Best", opacity=0.55, line={"width": 3}))
-        radar.update_layout(title="Criteria radar: Base Best vs Current Best", polar={"radialaxis": {"visible": True, "range": [0, 1]}}, height=440)
+        _style_plotly_figure(
+            radar,
+            height=440,
+            layout_overrides={"title": "Criteria radar: Base Best vs Current Best", "polar": {"radialaxis": {"visible": True, "range": [0, 1]}}},
+        )
         st.plotly_chart(radar, width="stretch")
 
     with c2:
@@ -887,7 +1125,7 @@ def render_app_mhs_charts(current: Dict[str, Dict[str, Any]], base: Dict[str, Di
     fig_rank = go.Figure()
     fig_rank.add_trace(go.Bar(x=merged["Code"], y=merged["Base"], name="Base", opacity=0.45))
     fig_rank.add_trace(go.Bar(x=merged["Code"], y=merged["Current"], name="Current", opacity=0.90))
-    fig_rank.update_layout(title="Ranking by alternative (Base vs Current)", barmode="group", height=420, yaxis_title="MCDA Score")
+    _style_plotly_figure(fig_rank, height=420, yaxis_title="MCDA Score", layout_overrides={"title": "Ranking by alternative (Base vs Current)", "barmode": "group"})
     st.plotly_chart(fig_rank, width="stretch")
 
     base_s3 = pd.DataFrame(base["stage3"]["alternatives"])[["Code", "lambda_Mi_events_per_year", "alpha_R"]]
@@ -902,7 +1140,7 @@ def render_app_mhs_charts(current: Dict[str, Dict[str, Any]], base: Dict[str, Di
 
     if not perf.empty:
         perf_fig = px.scatter(perf, x="LCC_COP", y="lambda_Mi_events_per_year", color="Scenario", symbol="Scenario", size="alpha_R", hover_data=["Code", "LCC_tilde", "alpha_R"], title="Alternatives performance plane: LCC vs failure rate")
-        perf_fig.update_layout(height=450, xaxis_title="LCC [COP]", yaxis_title="lambda_Mi [events/year]")
+        _style_plotly_figure(perf_fig, height=450, xaxis_title="LCC [COP]", yaxis_title="lambda_Mi [events/year]")
         st.plotly_chart(perf_fig, width="stretch")
 
     top_n = 10
@@ -916,10 +1154,15 @@ def render_app_mhs_charts(current: Dict[str, Dict[str, Any]], base: Dict[str, Di
 
     dumbbell = go.Figure()
     for _, row in dm.iterrows():
-        dumbbell.add_shape(type="line", x0=row["Base"], y0=row["y"], x1=row["Current"], y1=row["y"], line={"color": "rgba(50,50,50,.33)", "width": 2})
+        dumbbell.add_shape(type="line", x0=row["Base"], y0=row["y"], x1=row["Current"], y1=row["y"], line={"color": "rgba(127,127,127,0.45)", "width": 2})
     dumbbell.add_trace(go.Scatter(x=dm["Base"], y=dm["y"], mode="markers", marker={"size": 11, "symbol": "circle-open", "line": {"width": 2}}, name="Base", text=dm["Code"], hovertemplate="Code=%{text}<br>Base=%{x:.4f}<extra></extra>"))
     dumbbell.add_trace(go.Scatter(x=dm["Current"], y=dm["y"], mode="markers", marker={"size": 14, "symbol": "circle", "line": {"width": 1}}, name="Current", text=dm["Code"], hovertemplate="Code=%{text}<br>Current=%{x:.4f}<extra></extra>"))
-    dumbbell.update_layout(title="Top alternatives dumbbell comparison", height=500, yaxis={"tickmode": "array", "tickvals": dm["y"], "ticktext": dm["Code"], "autorange": "reversed"}, xaxis_title="MCDA Score")
+    _style_plotly_figure(
+        dumbbell,
+        height=500,
+        xaxis_title="MCDA Score",
+        layout_overrides={"title": "Top alternatives dumbbell comparison", "yaxis": {"tickmode": "array", "tickvals": dm["y"], "ticktext": dm["Code"], "autorange": "reversed"}},
+    )
     st.plotly_chart(dumbbell, width="stretch")
 
 
@@ -1111,7 +1354,7 @@ def _build_dynamic_weight_scenarios(current: Dict[str, Dict[str, Any]]) -> pd.Da
 
 
 def render_dynamic_article_figures(current: Dict[str, Dict[str, Any]]) -> None:
-    st.markdown("**Dynamic Reproduction of Figures 6-10 (Driven by Stage Outputs)**")
+    st.markdown("**Dynamic sensitivity views driven by stage outputs**")
     st.caption("All plots below are recomputed from Stage 1-6 outputs on every input change.")
 
     mat = _build_dynamic_material_df(current)
@@ -1125,17 +1368,17 @@ def render_dynamic_article_figures(current: Dict[str, Dict[str, Any]]) -> None:
         f6 = mat[["MaterialCode", "Label", "LCC_pu", "HydLoss_pu"]].copy()
         pareto_mask = _pareto_front(f6.rename(columns={"LCC_pu": "x", "HydLoss_pu": "y"}), "x", "y", minimize_x=True, maximize_y=False)
         f6["Pareto"] = pareto_mask
-        fig6 = px.scatter(f6, x="LCC_pu", y="HydLoss_pu", text="MaterialCode", color="Pareto", symbol="Pareto", title="Fig. 6 Dynamic - Pareto front (Hydraulic Loss vs LCC)")
+        fig6 = px.scatter(f6, x="LCC_pu", y="HydLoss_pu", text="MaterialCode", color="Pareto", symbol="Pareto", title="Pareto front: hydraulic loss vs life-cycle cost")
         fig6.update_traces(textposition="top center")
-        fig6.update_layout(xaxis_title="Life Cycle Cost (p.u.)", yaxis_title="Hydraulic Loss (p.u.)", height=430)
+        _style_plotly_figure(fig6, height=430, xaxis_title="Life Cycle Cost (p.u.)", yaxis_title="Hydraulic Loss (p.u.)")
         st.plotly_chart(fig6, width="stretch")
 
     with c2:
         f7 = mat[["MaterialCode", "Efficiency_pu", "DurabilityScore_pu", "Manufacturability_pu"]].copy()
         f7m = f7.melt(id_vars="MaterialCode", var_name="Metric", value_name="Score")
         f7m["Metric"] = f7m["Metric"].map({"Efficiency_pu": "Efficiency", "DurabilityScore_pu": "Durability", "Manufacturability_pu": "Manufacturability"})
-        fig7 = px.bar(f7m, x="MaterialCode", y="Score", color="Metric", barmode="group", title="Fig. 7 Dynamic - Comparison of key materials")
-        fig7.update_layout(xaxis_title="Materials", yaxis_title="Score (p.u.)", height=430)
+        fig7 = px.bar(f7m, x="MaterialCode", y="Score", color="Metric", barmode="group", title="Comparison of key materials")
+        _style_plotly_figure(fig7, height=430, xaxis_title="Materials", yaxis_title="Score (p.u.)", layout_overrides={"barmode": "group"})
         st.plotly_chart(fig7, width="stretch")
 
     c3, c4 = st.columns(2)
@@ -1143,26 +1386,26 @@ def render_dynamic_article_figures(current: Dict[str, Dict[str, Any]]) -> None:
         f8 = mat[["MaterialCode", "LCC_pu", "Durability_pu"]].copy()
         pareto_mask8 = _pareto_front(f8.rename(columns={"LCC_pu": "x", "Durability_pu": "y"}), "x", "y", minimize_x=True, maximize_y=True)
         f8["Pareto"] = pareto_mask8
-        fig8 = px.scatter(f8, x="LCC_pu", y="Durability_pu", text="MaterialCode", color="Pareto", symbol="Pareto", title="Fig. 8 Dynamic - Pareto material optimization")
+        fig8 = px.scatter(f8, x="LCC_pu", y="Durability_pu", text="MaterialCode", color="Pareto", symbol="Pareto", title="Pareto material optimization")
         fig8.update_traces(textposition="top center")
-        fig8.update_layout(xaxis_title="Life-Cycle Cost (p.u.)", yaxis_title="Material Durability (p.u.)", height=430)
+        _style_plotly_figure(fig8, height=430, xaxis_title="Life-Cycle Cost (p.u.)", yaxis_title="Material Durability (p.u.)")
         st.plotly_chart(fig8, width="stretch")
 
     with c4:
         turb = _build_dynamic_turbine_df(current)
         if turb.empty:
-            st.info("No alternative criteria available for dynamic Fig. 9.")
+            st.info("No alternative criteria available for the MCDA criteria comparison.")
         else:
             f9m = turb.melt(id_vars=["Code", "TurbineType"], var_name="Criterion", value_name="Value")
-            fig9 = px.bar(f9m, x="TurbineType", y="Value", color="Criterion", barmode="group", title="Fig. 9 Dynamic - Comparison by MCDA criteria")
-            fig9.update_layout(xaxis_title="Turbine Type", yaxis_title="Normalized Criteria (p.u.)", height=430)
+            fig9 = px.bar(f9m, x="TurbineType", y="Value", color="Criterion", barmode="group", title="Comparison by MCDA criteria")
+            _style_plotly_figure(fig9, height=430, xaxis_title="Turbine Type", yaxis_title="Normalized Criteria (p.u.)", layout_overrides={"barmode": "group"})
             st.plotly_chart(fig9, width="stretch")
 
     wdf = _build_dynamic_weight_scenarios(current)
     if not wdf.empty:
         f10m = wdf.melt(id_vars="Criteria", var_name="Scenario", value_name="Weight")
-        fig10 = px.bar(f10m, x="Criteria", y="Weight", color="Scenario", barmode="group", title="Fig. 10 Dynamic - MCDA weighting scenarios")
-        fig10.update_layout(xaxis_title="Criteria", yaxis_title="Relative Weight (p.u.)", height=430)
+        fig10 = px.bar(f10m, x="Criteria", y="Weight", color="Scenario", barmode="group", title="MCDA weighting scenarios")
+        _style_plotly_figure(fig10, height=430, xaxis_title="Criteria", yaxis_title="Relative Weight (p.u.)", layout_overrides={"barmode": "group"})
         st.plotly_chart(fig10, width="stretch")
 
 
@@ -1183,7 +1426,7 @@ def render_sensitivity_and_olade(current: Dict[str, Dict[str, Any]]) -> None:
             title="OLADE turbine envelope (article contextual table)",
         )
         fig_olade.update_traces(textposition="top center")
-        fig_olade.update_layout(height=420, xaxis_title="Flow [m^3/s]", yaxis_title="Net head [m]")
+        _style_plotly_figure(fig_olade, height=420, xaxis_title="Flow [m^3/s]", yaxis_title="Net head [m]")
         st.plotly_chart(fig_olade, width="stretch")
 
     with c2:
@@ -1194,7 +1437,7 @@ def render_sensitivity_and_olade(current: Dict[str, Dict[str, Any]]) -> None:
             color="Turbine",
             title="Expected output by OLADE alternative",
         )
-        fig_olade2.update_layout(height=420, xaxis_title="", yaxis_title="Expected Output [kW]")
+        _style_plotly_figure(fig_olade2, height=420, xaxis_title="", yaxis_title="Expected Output [kW]")
         st.plotly_chart(fig_olade2, width="stretch")
 
     alts4 = pd.DataFrame(current["stage4"]["alternatives"])
@@ -1215,10 +1458,10 @@ def render_sensitivity_and_olade(current: Dict[str, Dict[str, Any]]) -> None:
                 title="Pareto front (Economic cost vs Hydraulic score)",
             )
             fig_p.update_traces(textposition="top center")
-            fig_p.update_layout(height=430, xaxis_title="LCC [COP]", yaxis_title="Hydraulic score")
+            _style_plotly_figure(fig_p, height=430, xaxis_title="LCC [COP]", yaxis_title="Hydraulic score")
             st.plotly_chart(fig_p, width="stretch")
 
-    st.markdown("**MCDA weighting scenarios (article Figure 10 style)**")
+    st.markdown("**MCDA weighting scenarios**")
     scenario_rows = []
     for name, w_map in SCENARIO_WEIGHTS.items():
         s_df = _scenario_scores(current["stage5"], w_map)
@@ -1238,7 +1481,7 @@ def render_sensitivity_and_olade(current: Dict[str, Dict[str, Any]]) -> None:
             range_y=[0, max(1.0, float(scenario_df["Score"].max()) * 1.12)],
             title="Sensitivity animation across weighting scenarios",
         )
-        fig_s.update_layout(height=470, showlegend=False)
+        _style_plotly_figure(fig_s, height=470, showlegend=False)
         st.plotly_chart(fig_s, width="stretch")
 
         top_by_s = scenario_df.sort_values(["Scenario", "Score"], ascending=[True, False]).groupby("Scenario").head(1)
