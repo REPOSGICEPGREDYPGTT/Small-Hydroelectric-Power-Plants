@@ -80,40 +80,4 @@ Or use:
 run_app.bat
 ```
 
-## Running in Colab
 
-Use `colab_streamlit_runner.ipynb` and run all cells. The notebook recreates app files in the Colab runtime and launches Streamlit with a public tunnel.
-
-Note: Colab tunnel URLs are temporary unless you deploy to a persistent hosting service.
-
-## Stable Web Deployment
-
-For a persistent public URL, deploy to Streamlit Community Cloud:
-
-1. Push this repository to GitHub.
-2. Open https://share.streamlit.io.
-3. Create app with `streamlit_app.py` as the entrypoint.
-4. Share the generated `*.streamlit.app` URL.
-
-## Configuration
-
-In `streamlit_app.py`, you can edit:
-
-- `ARTICLE_PUBLICATION_URL`: Published article URL (if available).
-- `ARTICLE_PUBLICATION_STATUS`: Publication status text shown in the app.
-
-## Troubleshooting
-
-- **`ModuleNotFoundError` (for example `IPython`)**: run `pip install -r requirements.txt` in the active `.venv`.
-- **`streamlit` not recognized**: run with Python module invocation:
-
-```powershell
-.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
-```
-
-- **Message `Run with: ... -m streamlit run ...`**: this appears when launching `streamlit_app.py` directly with `python`; use the command above instead.
-- **UI looks stale after updates**: hard refresh browser (`Ctrl+F5`) and rerun Streamlit.
-
-## License
-
-Add your preferred license here (for example MIT, Apache-2.0, or proprietary).
