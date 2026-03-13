@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import copy
-import json
 from typing import Any, Dict, List
 
 import numpy as np
@@ -18,7 +17,6 @@ import stage5
 import stage6
 
 
-ARTICLE_SOURCE_PATH = r"c:\Users\ajust\OneDrive\Escritorio\Eduardo\DarioQuintero_articulo\Articulo_IAS_2026_R4.docx"
 ARTICLE_PUBLICATION_URL = "https://doi.org/10.1109/IAS62731.2025.11061555"
 ARTICLE_PUBLICATION_STATUS = "Published in 2025 IEEE Industry Applications Society Annual Meeting (IAS 2025)"
 ARTICLE_PUBLICATION_TITLE = "Optimizing Small Hydropower Key Material Considerations"
@@ -153,29 +151,27 @@ SCENARIO_WEIGHTS = {
     "Durability-priority": {"Hydraulic": 0.20, "LCC": 0.15, "Durability": 0.45, "Reliability": 0.20},
 }
 
-
 def inject_styles() -> None:
     st.markdown(
         """
         <style>
             @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
             :root {
-                --hm-card-bg: color-mix(in srgb, var(--secondary-background-color) 92%, var(--background-color) 8%);
-                --hm-card-border: color-mix(in srgb, var(--text-color) 16%, transparent);
-                --hm-card-text: var(--text-color);
-                --hm-card-strong: var(--text-color);
-                --hm-badge-bg: color-mix(in srgb, var(--secondary-background-color) 80%, var(--primary-color) 20%);
-                --hm-badge-border: color-mix(in srgb, var(--primary-color) 35%, transparent);
+                --hm-surface: var(--secondary-background-color);
+                --hm-text: var(--text-color);
+                --hm-secondary-text: color-mix(in srgb, var(--text-color) 70%, transparent);
+                --hm-divider: color-mix(in srgb, var(--text-color) 12%, transparent);
+                --hm-card-border: color-mix(in srgb, var(--text-color) 12%, transparent);
+                --hm-card-shadow:
+                    0 10px 22px rgba(0, 0, 0, 0.10),
+                    0 0 0 1px color-mix(in srgb, white 10%, transparent);
+                --hm-card-shadow-hover:
+                    0 14px 28px rgba(0, 0, 0, 0.14),
+                    0 0 0 1px color-mix(in srgb, white 16%, transparent);
+                --hm-accent: var(--primary-color);
+                --hm-badge-bg: color-mix(in srgb, var(--secondary-background-color) 88%, var(--primary-color) 12%);
+                --hm-badge-border: color-mix(in srgb, var(--primary-color) 25%, transparent);
                 --hm-badge-text: var(--text-color);
-                --hm-method-bg: color-mix(in srgb, var(--secondary-background-color) 92%, var(--background-color) 8%);
-                --hm-method-border: color-mix(in srgb, var(--text-color) 16%, transparent);
-                --hm-method-stage-bg: color-mix(in srgb, var(--primary-color) 20%, var(--secondary-background-color) 80%);
-                --hm-method-stage-border: color-mix(in srgb, var(--primary-color) 35%, transparent);
-                --hm-method-stage-text: var(--text-color);
-                --hm-method-title-text: var(--text-color);
-                --hm-method-body-text: var(--text-color);
-                --hm-method-body-strong: var(--text-color);
-                --hm-summary-text: var(--text-color);
             }
             html, body, [class*="css"] { font-family: 'IBM Plex Sans', sans-serif; }
             .block-container { padding-top: 1.0rem; padding-bottom: 1.8rem; }
@@ -190,185 +186,135 @@ def inject_styles() -> None:
             }
             .hero h1 { margin: 0; font-size: 1.45rem; font-weight: 700; }
             .hero p { margin: 6px 0 0 0; color: #d8e9ff; font-size: .95rem; }
-            .card {
+            .card,
+            .context-panel,
+            .overview-card,
+            .journey-card,
+            .method-card {
                 position: relative;
                 overflow: hidden;
                 border-radius: 12px;
-                padding: 14px 16px;
-                min-height: 132px;
-                border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
-                background:
-                    radial-gradient(circle at top left, color-mix(in srgb, var(--primary-color) 10%, transparent) 0%, transparent 38%),
-                    linear-gradient(
-                        180deg,
-                        color-mix(in srgb, var(--secondary-background-color) 94%, var(--background-color) 6%) 0%,
-                        color-mix(in srgb, var(--secondary-background-color) 84%, var(--background-color) 16%) 100%
-                    );
-                color: var(--hm-card-text) !important;
-                box-shadow:
-                    0 10px 24px rgba(15, 23, 42, 0.12),
-                    inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+                border: 1px solid var(--hm-card-border);
+                background: linear-gradient(180deg, color-mix(in srgb, var(--hm-accent) 4%, var(--hm-surface)) 0%, var(--hm-surface) 100%);
+                box-shadow: var(--hm-card-shadow);
+                color: var(--hm-text) !important;
+                transition: background-color 180ms ease, border-color 180ms ease, box-shadow 120ms ease-out, transform 120ms ease-out;
             }
-            .card::before {
+            .card::before,
+            .context-panel::before,
+            .overview-card::before,
+            .journey-card::before,
+            .method-card::before {
                 content: "";
                 position: absolute;
                 inset: 0 0 auto 0;
                 height: 2px;
-                background: linear-gradient(90deg, color-mix(in srgb, var(--primary-color) 72%, transparent) 0%, transparent 100%);
-                opacity: 0.9;
+                background: linear-gradient(90deg, var(--hm-accent) 0%, transparent 100%);
+                opacity: 0.82;
             }
-            .card b {
-                color: var(--hm-card-strong) !important;
-                font-weight: 700;
+            .card:hover,
+            .context-panel:hover,
+            .overview-card:hover,
+            .journey-card:hover,
+            .method-card:hover {
+                box-shadow: var(--hm-card-shadow-hover);
+                transform: translateY(-1px);
             }
-            .journey-card {
-                border-radius: 16px;
-                height: clamp(230px, 22vw, 280px);
+            .card {
                 padding: 16px 18px;
-                border: 1px solid rgba(86, 132, 214, 0.18);
-                background: linear-gradient(180deg, rgba(12, 21, 38, 0.90) 0%, rgba(8, 15, 28, 0.96) 100%);
-                box-shadow:
-                    0 12px 28px rgba(0, 0, 0, 0.18),
-                    inset 0 1px 0 rgba(255,255,255,0.04);
-                color: var(--text-color) !important;
-                display: flex;
-                flex-direction: column;
+                min-height: 132px;
             }
-            .journey-card b {
-                display: inline-block;
-                margin-bottom: 0.45rem;
-            }
-            .journey-blue {
-                background:
-                    radial-gradient(circle at 0% 0%, rgba(72,149,255,0.14) 0%, transparent 40%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
-            }
-            .journey-green {
-                background:
-                    radial-gradient(circle at 100% 0%, rgba(0,212,170,0.12) 0%, transparent 36%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
-            }
-            .journey-amber {
-                background:
-                    radial-gradient(circle at 50% 0%, rgba(255,168,76,0.12) 0%, transparent 34%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
-            }
+            .card b { color: var(--hm-text) !important; font-weight: 700; }
             .overview-card {
-                position: relative;
-                overflow: hidden;
-                border-radius: 16px;
-                height: clamp(250px, 24vw, 360px);
-                padding: 18px 20px;
-                border: 1px solid color-mix(in srgb, var(--primary-color) 28%, rgba(255,255,255,0.08) 72%);
-                background:
-                    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--primary-color) 24%, transparent) 0%, transparent 40%),
-                    radial-gradient(circle at 100% 0%, color-mix(in srgb, white 6%, transparent) 0%, transparent 28%),
-                    linear-gradient(
-                        160deg,
-                        color-mix(in srgb, #10243d 78%, var(--secondary-background-color) 22%) 0%,
-                        color-mix(in srgb, #0b1627 86%, var(--background-color) 14%) 100%
-                    );
-                box-shadow:
-                    0 18px 44px rgba(0, 0, 0, 0.28),
-                    inset 0 1px 0 rgba(255,255,255,0.08),
-                    inset 0 0 0 1px rgba(120,160,255,0.05);
-                color: var(--text-color) !important;
+                height: clamp(250px, 24vw, 340px);
+                padding: 20px;
+                margin-bottom: 14px;
                 display: flex;
                 flex-direction: column;
-            }
-            .overview-card::before {
-                content: "";
-                position: absolute;
-                inset: 0 0 auto 0;
-                height: 4px;
-                background: linear-gradient(90deg, color-mix(in srgb, var(--primary-color) 92%, white 8%) 0%, transparent 100%);
-                opacity: 1;
             }
             .overview-card::after {
                 content: "";
                 position: absolute;
                 inset: auto 18px 0 18px;
                 height: 1px;
-                background: linear-gradient(90deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+                background: linear-gradient(90deg, color-mix(in srgb, var(--hm-accent) 16%, transparent) 0%, transparent 100%);
             }
-            .overview-card b {
+            .overview-card b,
+            .journey-card b {
                 display: inline-block;
                 margin-bottom: 0.55rem;
-                color: var(--text-color) !important;
+                color: var(--hm-text) !important;
                 font-weight: 700;
                 font-size: 1.02rem;
                 letter-spacing: -0.01em;
             }
-            @media (prefers-color-scheme: dark) {
-                .overview-card {
-                    border: 1px solid rgba(64, 136, 255, 0.34);
-                    background:
-                        radial-gradient(circle at 0% 0%, rgba(52, 122, 255, 0.22) 0%, transparent 42%),
-                        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 26%),
-                        linear-gradient(180deg, rgba(14, 31, 54, 0.96) 0%, rgba(8, 18, 33, 0.98) 100%);
-                    box-shadow:
-                        0 20px 48px rgba(0, 0, 0, 0.32),
-                        0 0 0 1px rgba(64, 136, 255, 0.08),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-                }
-                .overview-card::before {
-                    height: 4px;
-                    background: linear-gradient(90deg, rgba(72, 149, 255, 0.95) 0%, rgba(72, 149, 255, 0.18) 72%, transparent 100%);
-                }
-                .overview-card::after {
-                    background: linear-gradient(90deg, rgba(255,255,255,0.14) 0%, transparent 100%);
-                }
+            .context-panel {
+                padding: 18px 20px;
+                margin: 8px 0 18px 0;
+            }
+            .context-panel-label {
+                color: var(--hm-secondary-text);
+                font-size: 0.82rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                margin-bottom: 0.5rem;
+            }
+            .context-panel-title,
+            .context-panel-title a {
+                color: var(--hm-text) !important;
+                font-weight: 600;
+                font-size: 1rem;
+                text-decoration: none;
+            }
+            .context-panel-title a:hover { color: var(--hm-accent) !important; }
+            .badge-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 0.9rem;
             }
             .badge {
                 display: inline-block;
                 border: 1px solid var(--hm-badge-border);
                 background: var(--hm-badge-bg);
                 border-radius: 999px;
-                padding: 3px 10px;
-                margin-right: 6px;
-                margin-bottom: 6px;
+                padding: 5px 11px;
                 font-size: .79rem;
+                line-height: 1.35;
                 color: var(--hm-badge-text);
             }
-            .method-card {
-                position: relative;
-                overflow: hidden;
-                border-radius: 16px;
-                border: 1px solid rgba(86, 132, 214, 0.16);
-                background:
-                    radial-gradient(circle at top left, rgba(72,149,255,0.10) 0%, transparent 36%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
-                padding: 14px 15px;
-                margin-bottom: 12px;
-                height: clamp(420px, 34vw, 520px);
-                box-shadow:
-                    0 14px 30px rgba(0, 0, 0, 0.22),
-                    inset 0 1px 0 rgba(255,255,255,0.04);
+            .journey-card {
+                height: clamp(248px, 22vw, 300px);
+                padding: 18px;
+                margin-bottom: 14px;
                 display: flex;
                 flex-direction: column;
             }
-            .method-card::before {
-                content: "";
-                position: absolute;
-                inset: 0 0 auto 0;
-                height: 3px;
-                background: linear-gradient(90deg, rgba(72,149,255,0.74) 0%, transparent 100%);
-                opacity: 0.9;
+            .journey-blue {
+                background: radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--hm-accent) 9%, transparent) 0%, transparent 32%), var(--hm-surface);
+            }
+            .journey-green {
+                background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--hm-accent) 8%, transparent) 0%, transparent 30%), var(--hm-surface);
+            }
+            .journey-amber {
+                background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--hm-accent) 8%, transparent) 0%, transparent 28%), var(--hm-surface);
+            }
+            .method-card {
+                padding: 18px 16px;
+                margin-bottom: 14px;
+                height: clamp(430px, 34vw, 520px);
+                display: flex;
+                flex-direction: column;
             }
             .method-blue {
-                background:
-                    radial-gradient(circle at 0% 0%, rgba(72,149,255,0.15) 0%, transparent 40%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+                background: radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--hm-accent) 10%, transparent) 0%, transparent 32%), var(--hm-surface);
             }
             .method-green {
-                background:
-                    radial-gradient(circle at 100% 0%, rgba(0,212,170,0.12) 0%, transparent 34%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+                background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--hm-accent) 8%, transparent) 0%, transparent 28%), var(--hm-surface);
             }
             .method-amber {
-                background:
-                    radial-gradient(circle at 50% 0%, rgba(255,168,76,0.12) 0%, transparent 36%),
-                    linear-gradient(180deg, rgba(12, 21, 38, 0.92) 0%, rgba(8, 15, 28, 0.98) 100%);
+                background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--hm-accent) 8%, transparent) 0%, transparent 28%), var(--hm-surface);
             }
             .method-stage {
                 display: inline-block;
@@ -376,9 +322,9 @@ def inject_styles() -> None:
                 font-weight: 700;
                 letter-spacing: .04em;
                 text-transform: uppercase;
-                color: var(--hm-method-stage-text);
-                background: var(--hm-method-stage-bg);
-                border: 1px solid var(--hm-method-stage-border);
+                color: var(--hm-text);
+                background: color-mix(in srgb, var(--hm-accent) 12%, var(--hm-surface) 88%);
+                border: 1px solid color-mix(in srgb, var(--hm-accent) 26%, var(--hm-divider) 74%);
                 border-radius: 999px;
                 padding: 2px 9px;
                 margin-bottom: 8px;
@@ -386,26 +332,21 @@ def inject_styles() -> None:
             .method-title {
                 margin: 0 0 6px 0;
                 font-size: 1.02rem;
-                color: var(--hm-method-title-text);
+                color: var(--hm-text);
                 font-weight: 700;
             }
             .method-line {
                 margin: 0 0 7px 0;
                 font-size: .84rem;
-                color: var(--hm-method-body-text);
+                color: var(--hm-text);
                 line-height: 1.35;
             }
-            .method-line b {
-                color: var(--hm-method-body-strong);
-                font-weight: 600;
-            }
-            .summary-text-metric {
-                margin-bottom: 0.25rem;
-            }
+            .method-line b { color: var(--hm-text); font-weight: 600; }
+            .summary-text-metric { margin-bottom: 0.25rem; }
             .summary-text-metric-label {
                 font-size: 0.95rem;
                 font-weight: 500;
-                color: var(--hm-summary-text);
+                color: var(--hm-text);
                 opacity: 0.72;
                 margin-bottom: 0.45rem;
             }
@@ -414,7 +355,7 @@ def inject_styles() -> None:
                 line-height: 1.04;
                 font-weight: 400;
                 letter-spacing: -0.02em;
-                color: var(--hm-summary-text);
+                color: var(--hm-text);
                 overflow-wrap: anywhere;
                 word-break: break-word;
             }
@@ -893,16 +834,29 @@ def render_overview_context(current: Dict[str, Dict[str, Any]] | None, base: Dic
         unsafe_allow_html=True,
     )
 
+    badges = "".join(f'<span class="badge">{line}</span>' for line in PLATFORM_HIGHLIGHTS)
     if ARTICLE_PUBLICATION_URL.strip():
         st.markdown(
-            f"**Technical reference source:** [{ARTICLE_PUBLICATION_TITLE}]({ARTICLE_PUBLICATION_URL.strip()})"
+            f"""
+            <div class="context-panel">
+                <div class="context-panel-label">Technical Reference Source</div>
+                <div class="context-panel-title"><a href="{ARTICLE_PUBLICATION_URL.strip()}" target="_blank">{ARTICLE_PUBLICATION_TITLE}</a></div>
+                <div class="badge-row">{badges}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
     else:
-        st.info("Technical reference source: published article URL will be provided here (currently under peer review).")
-    st.caption(f"Publication status: {ARTICLE_PUBLICATION_STATUS}.")
-
-    badges = "".join([f'<span class="badge">{line}</span>' for line in PLATFORM_HIGHLIGHTS])
-    st.markdown(badges, unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="context-panel">
+                <div class="context-panel-label">Technical Reference Source</div>
+                <div class="context-panel-title">Published article URL will be provided here.</div>
+                <div class="badge-row">{badges}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     st.markdown("### End-to-End Methodology (Stage 1 to Stage 6)")
     st.caption("Overview tab intentionally shows methodology only. Numerical results are available in the other tabs.")
@@ -1507,21 +1461,13 @@ def render_robustness_tables(current: Dict[str, Dict[str, Any]]) -> None:
     c3.dataframe(s3_df, width="stretch")
 
 
-def render_export(current: Dict[str, Dict[str, Any]], base: Dict[str, Dict[str, Any]], inputs: Dict[str, Dict[str, Any]]) -> None:
-    st.subheader("Audit and export")
-    payload = {"case_name": CASE_NAME, "article_source": ARTICLE_SOURCE_PATH, "inputs_current": inputs, "outputs_current": current, "outputs_base": base}
-    text = json.dumps(payload, ensure_ascii=True, indent=2)
-    st.download_button("Download JSON snapshot", data=text, file_name="shp_decision_snapshot.json", mime="application/json")
-    st.code(text[:7000] + ("\n... (truncated)" if len(text) > 7000 else ""), language="json")
-
-
 def main() -> None:
     st.set_page_config(page_title="HydroMaterials Decision Intelligence", layout="wide")
     inject_styles()
     render_header()
 
-    tab_context, tab_inputs, tab_summary, tab_results, tab_mhs, tab_sens, tab_export = st.tabs(
-        ["Overview", "Inputs", "Executive Summary", "Results by Stage", "App_MHS Figures", "Sensitivity and OLADE", "Export"]
+    tab_context, tab_inputs, tab_summary, tab_results, tab_mhs, tab_sens = st.tabs(
+        ["Overview", "Inputs", "Executive Summary", "Results by Stage", "App_MHS Figures", "Sensitivity and OLADE"]
     )
 
     with tab_inputs:
@@ -1553,9 +1499,6 @@ def main() -> None:
         render_sensitivity_and_olade(current)
         render_robustness_tables(current)
 
-    with tab_export:
-        render_export(current, base, inputs)
-
 
 if __name__ == "__main__":
     import logging
@@ -1566,4 +1509,3 @@ if __name__ == "__main__":
         print("Run with: .\\.venv\\Scripts\\python.exe -m streamlit run streamlit_app.py")
     else:
         main()
-
